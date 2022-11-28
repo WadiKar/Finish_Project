@@ -9,7 +9,7 @@ class Patient(models.Model):
     work_done = models.CharField(max_length=128)
     patient = models.ForeignKey('Company', on_delete=models.CASCADE)
 
-
+Specialist, Company, Patient
 class Company(models.Model):
     name_company = models.CharField(max_length=256)
     industry = models.CharField(max_length=128)
