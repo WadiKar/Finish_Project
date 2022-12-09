@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="card w-75">
+        <div class="card-header">
+            <span> {{ release.title }}</span>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                <li class="list-group-item">{{ release.category_release }}</li>
+                <li class="list-group-item">{{ release.author_specialist }}</li>
+                <li class="list-group-item">{{ release.text}}</li>
+                <li class="list-group-item">{{ release.date}}</li>
+
+            </ul>
+        </div>
+    </div>
+    <p>
+
+    </p>
+
+
+{% endblock %}

@@ -1,0 +1,5 @@
+<ul class="list-group">
+    {% for obj in objects %}
+        <ul class="list-group-item"><a href="{{ obj.get_absolute_url }}"> {{ obj }}</a></ul>
+    {% endfor %}
+</ul>

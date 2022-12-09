@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="card w-75">
+        <div class="card-header">
+            <span> {{ audiobook.book }}</span>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                <li class="list-group-item">{{ audiobook.kategoris }}</li>
+                <li class="list-group-item">{{ audiobook.autors }}</li>
+                <li class="list-group-item">{{ audiobook.time}}</li>
+            </ul>
+        </div>
+    </div>
+    <p>
+
+    </p>
+    <ul class="list-group">
+        {% for audiobook in audiobook.question_set.all %}
+            <li class="list-group-item">{{ audiobook.autors }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
+

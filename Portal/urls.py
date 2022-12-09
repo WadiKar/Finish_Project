@@ -16,15 +16,35 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from people import views
+from people.views import LogoutView, RegisterView, LoginView
+from media.views import BooksView, AudiobooksView, ReleasesView, BookDetailView, AudiobookDetailView, AddBookView, \
+    ListAutorView
+#releasesDetailView
+#from media import views
 from django.views.generic import TemplateView
+
+
+class ReleasesDetailView:
+    pass
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='base.html'), name='index'),
-    path('logout/', views.LogoutView.as_view(), name='logout'),
-    path('register/', views.RegisterView.as_view(), name='register'),
-    path('login/', views.LoginView.as_view(), name='login'),
-    #path('movie/<int:pk>/', views.MovieDetailView.as_view(), name='detail_release'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('register/', RegisterView.as_view(), name='register'),
+    path('login/', LoginView.as_view(), name='login'),
+    #widoki ksiazki, audiobookow i postow
+    path('books/', BooksView.as_view(), name='view_books'),
+    path('audiobooks/', AudiobooksView.as_view(), name='view_audiobooks'),
+    path('release/', ReleasesView.as_view(), name='view_release'),
+    # #widoki poszczegolnych ksiazek, audbiobookow i postow
+    path('book/<int:pk>/', BookDetailView.as_view(), name='detail_books'),
+    path('audiobook/<int:pk>/', AudiobookDetailView.as_view(), name='detail_audiobook'),
+    #path('release/<int:pk>/', releasesDetailView, name='detail_release'),
+    #widoki lekarzy
+   # path('specialist/', views.SpecialistView.as_view(), name='view_specialist')
+    #path('specialist/<int:pk>/', views.SpecialistDetailView.as_view(), name='detail_specialist'),
+    path('addBook/', AddBookView.as_view(), name='create_book'),
+path('listAutor/', ListAutorView.as_view(), name='list_auhtor'),
 ]
-#media path('settings/', views.SettingsView.as_view(), name='settings'),

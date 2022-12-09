@@ -2,45 +2,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% csrf_token %}
     <meta charset="UTF-8">
     <title>Title</title>
     <link href="{% static 'bootstrap-5.2.2-dist/css/bootstrap.min.css' %}" rel="stylesheet" crossorigin="anonymous">
     <script src="{% static 'bootstrap-5.2.2-dist/js/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script>
 </head>
 <body>
-
-
 <nav class="navbar navbar-expand-sm bg-light navbar-light">
     <div class="container-fluid">
         <ul class="navbar-nav">
-            <li class="nav-item">
 
-                {% if user.is_authenticated %}
+
+            {% if user.is_authenticated %}
+            <div class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-            </li>
+            </div>
+            <div class="nav-item">
+                <a class="nav-link" href="{% url 'view_books' %}">Books</a>
+            </div>
+
+            <div class="nav-item">
+                <a class="nav-link" href="{% url 'view_audiobooks' %}">Audiobooks</a>
+            </div>
+
+            <div class="nav-item">
+                <a class="nav-link" href="{% url 'view_release' %}">New Post</a>
+            </div>
             {% else %}
-            <li class="nav-item">
+            <div> class="nav-item">
                 <a class="nav-link" href="{% url 'login' %}">Login</a>
-            </li>
-            <li class="nav-item">
+            </div>
+            <div> class="nav-item">
                 <a class="nav-link" href="{% url 'register' %}">Register</a>
-            </li>
-            <nav class="navbar navbar-expand-sm bg-light navbar-light">
-                <div class="container-fluid">
-                    <ul class="navbar-nav">
-                        <div class="nav-item">
-                            <a class="nav-link active" href="{% url 'register' %}">Worker</a>
-                        </div>
-                        <div class="nav-item">
-                            <a class="nav-link" href="{% url 'register' %}">Life coach</a>
-                        </div>
-                        <div class="nav-item">
-                            <a class="nav-link" href="{% url 'register' %}">Company</a>
-                        </div>
-                    </ul>
-                </div>
-            </nav>
+            </div>
             {% endif %}
+            {% if perms.media.add_book %}
+            <div class="nav-item">
+                <a class="nav-link" href="{% url 'create_book' %}">Add Book</a>
+            </div>
+             {% endif %}
+             <div class="nav-item">
+                <a class="nav-link" href="{% url 'list_auhtor' %}">Authors</a>
+            </div>
+
 
         </ul>
     </div>

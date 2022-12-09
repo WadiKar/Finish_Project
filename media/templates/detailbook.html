@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="card w-75">
+        <div class="card-header">
+            <span> {{ book.title }}</span>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                <li class="list-group-item">{{ book.kategoris }}</li>
+                <li class="list-group-item">{{ book.autors }}</li>
+                <li class="list-group-item">{{ book.year}}</li>
+            </ul>
+        </div>
+    </div>
+    <p>
+
+    </p>
+    <ul class="list-group">
+        {% for book in book.question_set.all %}
+            <li class="list-group-item">{{ book.text }}</li>
+        {% endfor %}
+        {% resetcycle %}
+    </ul>
+
+{% endblock %}

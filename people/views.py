@@ -5,10 +5,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth, Group
 from django.contrib.auth import authenticate, login, logout
 
-from media.forms import ReleaseAddForm
+# from media.forms import ReleaseAddForm
 from media.models import Category, Release
-from people.forms import  UserCreateForm, LoginForm
-#from people.forms import ProfileAddForm,
+from people.forms import UserCreateForm, LoginForm
+
 
 class RegisterView(View):
 
@@ -50,28 +50,10 @@ class LoginView(View):
 
 class LogoutView(View):
     def get(self, request):
-        logout(request)  #
+        logout(request)
         return redirect('index')
 
-
-class AddReleaseView(PermissionRequiredMixin, View):
-    permission_required = ['media.add_release']
-
-    def post(self, request, Category_pk):
-        form = ReleaseAddForm(request.POST)
-        category = Category.objects.get(pk=Category_pk)
-        if form.is_valid():
-            release = form.save(commit=False)
-            release.category = category
-            release.author_specialist = request.user  #
-            release.save()
-            return redirect('detail_release', Category_pk)
-
-
-class ReleaseDetailView(View):
-
-    def get(self, request,
-            pk):  ## co to jest to pk, to id, ale jak!? jak to się dizieje ze czasem jest np movie.id i coś działa? albo to z user
-        release = Release.objects.get(pk=pk)
-        form = ReleaseAddForm()
-        return render(request, 'movie_detail.html', {'movie': movie, 'form': form})
+# class DocumentSetDetailView(UserPassesTestMixin, DetailView):
+# # UserPassedTestMixin
+#     def test_func(self):
+#         return self.request.user.groups.filter(name='Lekarze').exists()
