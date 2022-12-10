@@ -423,3 +423,39 @@ from people.models import Specialist, Company, User, Person
 #
 #             return redirect('settings')
 #         return render(request, 'settings.html', {'user_profile': user_profile})
+
+#lisy2authors bylo wczesniej tak
+# {% extends 'base.html' %}
+# {% block content %}
+#     <ul class="list-group">
+#     {% for author in authors %}
+#         <ul class="list-group-item"><a href="/authors/{{ author.id }}">
+#             {{ author.title }}
+#             {% for author in authors.all %}
+#                 {{author.fullname}}
+#             {% endfor %}
+#         </a></ul>
+#     {% endfor %}
+#     </ul>
+#
+# {% endblock %}
+
+# class AddBookView(UserPassesTestMixin, View):
+#     def test_func(self):
+#         return self.request.user.groups.filter(name='Specialist').exists()
+#
+#     def get(self, request):
+#         form = BookAddForm()
+#         return render(request, 'form.html', {'form': form})
+#
+#     def post(self, request):
+#         form = BookAddForm(request.POST)
+#         if form.is_valid():
+#             title = form.cleaned_data['title']
+#             year = form.cleaned_data['year']
+#             authors = form.cleaned_data['authors']
+#             categories = form.cleaned_data['categories']
+#             Book.objects.create(title=title, year=year, authors=authors, categories=categories)
+#             return redirect('/')
+#         return render(request, 'form.html', {
+#             'form': form})

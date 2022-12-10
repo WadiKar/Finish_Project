@@ -53,7 +53,4 @@ class LogoutView(View):
         logout(request)
         return redirect('index')
 
-# class DocumentSetDetailView(UserPassesTestMixin, DetailView):
-# # UserPassedTestMixin
-#     def test_func(self):
-#         return self.request.user.groups.filter(name='Lekarze').exists()
+

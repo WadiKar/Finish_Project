@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from people.views import LogoutView, RegisterView, LoginView
 from media.views import BooksView, AudiobooksView, ReleasesView, BookDetailView, AudiobookDetailView, AddBookView, \
-    ListAutorView
+    AuthorView, CreateAuthorView, AuthorDetailView, AuthorView, AddAudiobookView
 #releasesDetailView
 #from media import views
 from django.views.generic import TemplateView
@@ -34,17 +34,18 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
-    #widoki ksiazki, audiobookow i postow
     path('books/', BooksView.as_view(), name='view_books'),
     path('audiobooks/', AudiobooksView.as_view(), name='view_audiobooks'),
-    path('release/', ReleasesView.as_view(), name='view_release'),
-    # #widoki poszczegolnych ksiazek, audbiobookow i postow
-    path('book/<int:pk>/', BookDetailView.as_view(), name='detail_books'),
-    path('audiobook/<int:pk>/', AudiobookDetailView.as_view(), name='detail_audiobook'),
-    #path('release/<int:pk>/', releasesDetailView, name='detail_release'),
+    path('releases/', ReleasesView.as_view(), name='view_release'),
+    path('books/<int:pk>/', BookDetailView.as_view(), name='detail_books'),
+    path('audiobooks/<int:pk>/', AudiobookDetailView.as_view(), name='detail_audiobook'),
+    #path('releases/<int:pk>/', releasesDetailView, name='detail_release'),
     #widoki lekarzy
    # path('specialist/', views.SpecialistView.as_view(), name='view_specialist')
     #path('specialist/<int:pk>/', views.SpecialistDetailView.as_view(), name='detail_specialist'),
     path('addBook/', AddBookView.as_view(), name='create_book'),
-path('listAutor/', ListAutorView.as_view(), name='list_auhtor'),
+    path('createauthor/', CreateAuthorView.as_view(), name='create_author'),
+    path('authors/', AuthorView.as_view(), name='view_author'),
+    path('authors/<int:pk>/', AuthorDetailView.as_view(), name='detail_author'),
+    path('createaudiobook/', AddAudiobookView.as_view(), name='create_audiobook')
 ]

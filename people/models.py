@@ -6,7 +6,11 @@ from datetime import datetime
 User = get_user_model()
 
 
-# Create your models here.
+def is_specialist(self):
+    return self.groups.filter(name='Specialist').exists()
+
+
+User.add_to_class("is_specialist", is_specialist)
 
 
 class Company(models.Model):
@@ -14,11 +18,15 @@ class Company(models.Model):
     industry = models.CharField(max_length=64)
     employees = models.ManyToManyField(User)
 
+    def __str__(self):
+        return self.name_company
 
 class Visit(models.Model):
-    time =models.DateTimeField(auto_now_add=True)
+    what_time = models.DateTimeField(auto_now_add=True)
     location = models.CharField(max_length=128)
-    specialist = models.ForeignKey(User, on_delete=models.CASCADE)
-    patient = models.ForeignKey(Company, on_delete=models.CASCADE)
+    specialist = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    patient = models.ForeignKey(Company, null=True, on_delete=models.SET_NULL)
 
-# UserPassedTestMixin
+    def __str__(self):
+        return self.location, self.what_time
+

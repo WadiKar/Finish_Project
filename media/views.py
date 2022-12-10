@@ -1,12 +1,13 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.views import View
+from django.views.generic import DetailView
 
-from media.forms import ReleaseAddForm, BookAddForm
-from media.models import Book, Category, Audiobook, Release, Autor
+from media.forms import ReleaseAddForm, BookAddForm, AuthorAddFrom, AudiobookAddForm
+from media.models import Book, Category, Audiobook, Release, Author
 from people.models import User
 
 
@@ -19,13 +20,34 @@ class IndexView(View):
 class BooksView(View):
     def get(self, request):
         ksiazki = Book.objects.all()
-        return render(request, 'listbook.html', {'books': ksiazki})
+        return render(request, 'listy2.html', {'books': ksiazki})
 
 
-class AudiobooksView(View):
+class BookDetailView(View):
+
+    def get(self, request, pk):
+        ksiazka = Book.objects.get(pk=pk)
+        return render(request, 'detailbook.html', {'book': ksiazka})
+
+
+class AddBookView(UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.groups.filter(name='Specialist').exists()
+
     def get(self, request):
-        audiobuki = Audiobook.objects.all()
-        return render(request, 'listaudiobooks.html', {'audiobooks': audiobuki})
+        form = BookAddForm()
+        return render(request, 'form.html', {'form': form})
+
+    def post(self, request):
+        form = BookAddForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            year = form.cleaned_data['year']
+            authors = form.cleaned_data['authors']
+            categories = form.cleaned_data['categories']
+            Book.objects.create(title=title, year=year, authors=authors, categories=categories)
+            return redirect('/')
+        return render(request, 'form.html', {'form': form})
 
 
 class ReleasesView(View):
@@ -34,64 +56,66 @@ class ReleasesView(View):
         return render(request, 'listaudiobooks.html', {'release': nowe_posty})
 
 
-class BookDetailView(View):
+class AudiobookDetailView(View):
 
     def get(self, request, pk):
-        ksiazka = Book.objects.get(pk=pk)
-        return render(request, 'detailbook.html', {'movie': ksiazka})
+        nowy_post = Audiobook.objects.get(pk=pk)
+        return render(request, 'detailrelease.html', {'new_post': nowy_post})
+
+
+
+class AudiobooksView(View):
+    def get(self, request):
+        audiobuki = Audiobook.objects.all()
+        return render(request, 'listy2audiobooks.html', {'audiobooks': audiobuki})
 
 
 class AudiobookDetailView(View):
 
     def get(self, request, pk):
         audiobuks = Audiobook.objects.get(pk=pk)
-        return render(request, 'detailaudiobook.html', {'audiobook': audiobuks})
+        return render(request, 'detailaudiobook.html', {'audiobooks': audiobuks})
 
 
-# class ReleasesDetailView(View):
-#     def get(self, request, pk):
-#         nowy_post = Release.objects.get(pk=pk)
-#         return render(request, 'detailrelease.html', {'release': nowy_post})
-# def releasesDetailView(request, pk):
-#
-#     nowy_post = Release.objects.get(pk=pk)
-#     form = ReleaseAddForm()
-#     return render(request, 'detailrelease.html', {'release': nowy_post, 'form': form})
-
-class AddBookView(PermissionRequiredMixin, View):
-    permission_required = ['media.add_book']
+class AddAudiobookView(UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.groups.filter(name='Specialist').exists()
 
     def get(self, request):
-        form = BookAddForm()  #
+        form = AudiobookAddForm()
         return render(request, 'form.html', {'form': form})
 
     def post(self, request):
-        form = BookAddForm(request.POST)  #
+        form = AudiobookAddForm(request.POST)
         if form.is_valid():
-            title = form.cleaned_data['title']
-            year = form.cleaned_data['year']
-            autors = form.cleaned_data['autors']
-            kategoris = form.cleaned_data['kategoris']
-            Book.objects.create(title=title, year=year,
-                                 autors=autors, kategoris=kategoris)
+            # title = form.cleaned_data['title']
+            # time = form.cleaned_data['time']
+            # Book.objects.create(title=title, time=time)
             return redirect('/')
-        return render(request, 'form.html', {
-            'form': form})
+        return render(request, 'form.html', {'form': form})
 
 
-class CreateAutorView(View):
+class CreateAuthorView(View):
+    def test_func(self):
+        return self.request.user.groups.filter(name='Specialist').exists()
 
     def get(self, request):
-        return render(request, 'addAuthor.tml')
+        return render(request, 'create_author.html')
 
     def post(self, request):
-        imie = request.POST.get('first_name')
-        nazwisko = request.POST.get('last_name')
-        Autor.objects.create(first_name=imie, last_name=nazwisko)
-        return redirect('list_person')
+        fullname = request.POST.get('fullname')
+        Author.objects.create(fullname=fullname)
+        return redirect('view_author')
 
 
-class ListAutorView(View):
+class AuthorView(View):
     def get(self, request):
-        autorzy = Autor.objects.all()
-        return render(request, 'listauthor.html', {'authors': autorzy})
+        autorzy = Author.objects.all()
+        return render(request, 'listy2authors.html', {'authors': autorzy})
+
+
+class AuthorDetailView(View):
+
+    def get(self, request, pk):
+        autorzy = Author.objects.get(pk=pk)
+        return render(request, 'detailauthor.html', {'author': autorzy})

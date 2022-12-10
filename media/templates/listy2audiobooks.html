@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+    <ul class="list-group">
+    {% for audiobook in audiobooks %}
+        <ul class="list-group-item"><a href="/audiobooks/{{ audiobook.id }}">
+            {{ audiobook.title }}
+            {% for author in audiobook.authors.all %}
+                {{author}}
+            {% endfor %}
+            <h3> time:{{audiobook.time}} </h3>
+        </a></ul>
+    {% endfor %}
+    </ul>
+
+{% endblock %}

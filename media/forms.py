@@ -1,15 +1,19 @@
 from django import forms
+from wtforms import ValidationError
 
-from media.models import Release, Book, Category
+from media.models import Release, Book, Category, Author
 from people.models import User
 
 
 class BookAddForm(forms.Form):
     title = forms.CharField(max_length=150)
     year = forms.IntegerField()
-    autors = forms.ModelMultipleChoiceField(queryset=Book.objects.all(), widget=forms.CheckboxSelectMultiple())
-    kategoris = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple())
+    authors = forms.ModelMultipleChoiceField(queryset=Author.objects.all(), widget=forms.CheckboxSelectMultiple())
+    categories = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple())
 
+    def clean(self):
+        cleaned_data = super().clean()  ## wykorzystuje metody z min-year czy movieadd
+        return cleaned_data
 
 # class ReleaseAddForm(forms.Form):
 #     text = forms.TextField()
@@ -22,3 +26,19 @@ class ReleaseAddForm(forms.Form):
     class Meta:
         model = Release
         fields = ['text']
+
+
+class AuthorAddFrom(forms.Form):
+    fullname = forms.CharField(max_length=128)
+
+    class Meta:
+        model = Author
+        fields = ['fullname']
+
+
+
+class AudiobookAddForm(forms.Form):
+    time = forms.IntegerField()
+    book = forms.ModelChoiceField(queryset=Book.objects.all(), widget=forms.RadioSelect)
+
+
