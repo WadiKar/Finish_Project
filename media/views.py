@@ -1,3 +1,5 @@
+from multiprocessing.reduction import register
+
 from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -14,13 +16,18 @@ from people.models import User
 class IndexView(View):
 
     def get(self, request):
-        return render(request, 'klu')
+        return render(request, '')
 
 
 class BooksView(View):
     def get(self, request):
-        ksiazki = Book.objects.all()
-        return render(request, 'listy2.html', {'books': ksiazki})
+        #choose_category = request.GET.get('category')
+        if request.GET.get('category') != '':
+            ksiazki = Book.objects.filter(categories__id=request.GET.get('category')).all()
+        else:
+            ksiazki = Book.objects.all()
+        categories = Category.objects.all()
+        return render(request, 'listy2books.html', {'books': ksiazki, 'categories': categories})
 
 
 class BookDetailView(View):
@@ -45,24 +52,36 @@ class AddBookView(UserPassesTestMixin, View):
             year = form.cleaned_data['year']
             authors = form.cleaned_data['authors']
             categories = form.cleaned_data['categories']
-            Book.objects.create(title=title, year=year, authors=authors, categories=categories)
-            return redirect('/')
+            book = Book.objects.create(title=title, year=year)
+            book.authors.set(authors)
+            book.categories.set(categories)
+
+            return redirect('view_books')
         return render(request, 'form.html', {'form': form})
 
 
 class ReleasesView(View):
     def get(self, request):
-        nowe_posty = Audiobook.objects.all()
-        return render(request, 'listaudiobooks.html', {'release': nowe_posty})
+        nowe_posty = Release.objects.all()
+        return render(request, 'listy2release.html', {'release': nowe_posty})
 
 
-class AudiobookDetailView(View):
+class ReleaseDetailView(View):
 
     def get(self, request, pk):
-        nowy_post = Audiobook.objects.get(pk=pk)
-        return render(request, 'detailrelease.html', {'new_post': nowy_post})
+        released = Release.objects.get(pk=pk)
+        return render(request, 'detailrelease.html', {'release': released})
 
+class RelsortView(View):
+    def get(self, request, category_release=None):
+        choose_category = request.GET.get('date')
+        if choose_category != '':
+            relacje = Release.objects.filter(category_release__id=choose_category).all()
+        else:
 
+            relacje = Release.objects.all()
+        category_release = Category.objects.all()
+        return render(request, 'listy2release.html', {'release': relacje, 'categories': category_release, 'choose_category': int(choose_category)if choose_category else None})
 
 class AudiobooksView(View):
     def get(self, request):
@@ -75,6 +94,8 @@ class AudiobookDetailView(View):
     def get(self, request, pk):
         audiobuks = Audiobook.objects.get(pk=pk)
         return render(request, 'detailaudiobook.html', {'audiobooks': audiobuks})
+
+
 
 
 class AddAudiobookView(UserPassesTestMixin, View):
@@ -119,3 +140,12 @@ class AuthorDetailView(View):
     def get(self, request, pk):
         autorzy = Author.objects.get(pk=pk)
         return render(request, 'detailauthor.html', {'author': autorzy})
+
+# @register.filter
+# def sort_lower(lst, fullname):
+#     Author.objects.all().extra(select={'lower_name':'LOWER(NAME)'}, order_by='lower_name')
+#     return sorted(lst,fullname=lambda item: getattr(item, fullname).lower())
+# def filter(self, request):
+#     User.objects.annotate(new_field=('first_name')).filter(new_field='Ken')
+
+

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+    <ul class="list-group">
+        {% for release in release.all %}
+        <div class="list-group-item"><a href="/releases/{{ release.id }}">
+            {{release.title}}
+
+        </a></div>
+        {% endfor %}
+
+    </ul>
+
+{% endblock %}

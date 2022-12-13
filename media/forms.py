@@ -1,7 +1,7 @@
 from django import forms
 from wtforms import ValidationError
 
-from media.models import Release, Book, Category, Author
+from media.models import Release, Book, Category, Author, Audiobook
 from people.models import User
 
 
@@ -38,7 +38,7 @@ class AuthorAddFrom(forms.Form):
 
 
 class AudiobookAddForm(forms.Form):
-    time = forms.IntegerField()
-    book = forms.ModelChoiceField(queryset=Book.objects.all(), widget=forms.RadioSelect)
+    time = forms.CharField()
+    book = forms.ModelChoiceField(queryset=Audiobook.objects.all(), widget=forms.RadioSelect)
 
 

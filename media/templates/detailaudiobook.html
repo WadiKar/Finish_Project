@@ -1,30 +1,3 @@
-<!--{% extends 'base.html' %}-->
-
-<!--{% block content %}-->
-<!--    <div class="card w-75">-->
-<!--        <div class="card-header">-->
-<!--            <span> {{ audiobook.book }}</span>-->
-<!--        </div>-->
-<!--        <div class="card-body">-->
-<!--            <ul class="list-group">-->
-<!--                <li class="list-group-item">{{ audiobook.categories }}</li>-->
-<!--                <li class="list-group-item">{{ audiobook.authors }}</li>-->
-<!--                <li class="list-group-item">{{ audiobook.time}}</li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <p>-->
-
-<!--    </p>-->
-<!--    <ul class="list-group">-->
-<!--        {% for audiobook in audiobook.question_set.all %}-->
-<!--            <li class="list-group-item">{{ audiobook.authors }}</li>-->
-<!--        {% endfor %}-->
-<!--    </ul>-->
-
-<!--{% endblock %}-->
-
-
 
 {% extends 'base.html' %}
 
@@ -32,26 +5,26 @@
 <div class="card w-75">
     <div class="card-header">
 
-        <h1> Title: {{ audiobook.title }}</h1>
+        <h1> Title: {{ audiobooks.book.title }}</h1>
     </div>
     <div class="card-body">
 
         <h2> Authors</h2>
         <ul class="list-group">
-            {% for author in audiobook.authors.all %}
+            {% for author in audiobooks.authors.all %}
             <li class="list-group-item">{{ author }}</li>
             {% endfor %}
 
         </ul>
         <h2> Categories</h2>
         <ul class="list-group">
-            {% for category in audiobook.categories.all %}
+            {% for category in audiobooks.categories.all %}
             <li class="list-group-item">{{ category }}</li>
             {% endfor %}
 
         </ul>
 
-        <div> Time: {{ audiobook.time}}</div>
+        <div> Time: {{ audiobooks.time}} minutes</div>
     </div>
 </div>
 <p>

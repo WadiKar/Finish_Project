@@ -43,11 +43,11 @@ class Audiobook(models.Model):
     book = models.ForeignKey(Book, blank=False, null=True, on_delete=models.CASCADE, )
 
     def __str__(self):
-        return self.book
+        return self.book.title
 
 
 class Release(models.Model):
-    title= models.TextField(max_length=200)
+    title = models.TextField(max_length=200)
     text = models.TextField(max_length=1200)
     category_release = models.ForeignKey(Category, on_delete=models.CASCADE)
     author_specialist = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
@@ -55,4 +55,4 @@ class Release(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.author_specialist
+        return self.title

@@ -1,12 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
     <ul class="list-group">
-        {% for author in authors %}
+        {% for author in authors.all %}
         <div class="list-group-item"><a href="/authors/{{ author.id }}">
-            {{ author.title }}
-            {% for author in authors.all %}
-                {{author.fullname}}
-            {% endfor %}
+            {{author.fullname}}
+
         </a></div>
         {% endfor %}
 

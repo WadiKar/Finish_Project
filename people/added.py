@@ -459,3 +459,23 @@ from people.models import Specialist, Company, User, Person
 #             return redirect('/')
 #         return render(request, 'form.html', {
 #             'form': form})
+
+
+#
+# class BooksView(View):
+#     def get(self, request, category=None):
+#         choose_category = request.GET.get('category')
+#         if choose_category != '':
+#             ksiazki = Book.objects.filter(categories__id=choose_category).all()
+#         else:
+#
+#             ksiazki = Book.objects.all()
+#         categories = Category.objects.all()
+#         return render(request, 'listy2books.html', {'books': ksiazki, 'categories': categories, 'choose_category': int(choose_category)if choose_category else None})
+
+
+
+#             <!--            {% if request.user.is_specialist %}-->
+# { % if request.user.is_specialist %}
+# { % if perms.Portal.create_book
+# ' %}-->

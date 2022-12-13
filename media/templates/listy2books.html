@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<form>
+<body>
+<h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3"><a href="/">Home/</a>  List Books </h1>
+</body>
+    <select name="category" id="categoryid">
+    <option value="">All</option>
+    {%for category in categories %}
+        <option value="{{category.id}}"
+                {% if category.id == choose_category %} selected  {% endif %} >{{category.name}}</option>
+
+            {%endfor %}
+    </select>
+    <input type="submit" value="filter">
+
+</form>
+    <ul class="list-group">
+    {% for book in books %}
+        <ul class="list-group-item"><a href="/books/{{ book.id }}">
+            {{ book.title }}
+            {% for author in book.authors.all %}
+                {{author}}
+            {% endfor %} {{book.year}}
+        </a></ul>
+    {% endfor %}
+    </ul>
+
+{% endblock %}

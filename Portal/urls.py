@@ -16,9 +16,10 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from people.views import LogoutView, RegisterView, LoginView
-from media.views import BooksView, AudiobooksView, ReleasesView, BookDetailView, AudiobookDetailView, AddBookView, \
-    AuthorView, CreateAuthorView, AuthorDetailView, AuthorView, AddAudiobookView
+from people.views import LogoutView, RegisterView, LoginView, SpecialistView,SpecialistDetailView, MyView
+from media.views import BooksView, AudiobooksView, BookDetailView, AudiobookDetailView, AddBookView, \
+    AuthorView, CreateAuthorView, AuthorDetailView, AuthorView, AddAudiobookView, ReleaseDetailView, \
+    RelsortView, ReleasesView
 #releasesDetailView
 #from media import views
 from django.views.generic import TemplateView
@@ -39,13 +40,18 @@ urlpatterns = [
     path('releases/', ReleasesView.as_view(), name='view_release'),
     path('books/<int:pk>/', BookDetailView.as_view(), name='detail_books'),
     path('audiobooks/<int:pk>/', AudiobookDetailView.as_view(), name='detail_audiobook'),
-    #path('releases/<int:pk>/', releasesDetailView, name='detail_release'),
-    #widoki lekarzy
    # path('specialist/', views.SpecialistView.as_view(), name='view_specialist')
     #path('specialist/<int:pk>/', views.SpecialistDetailView.as_view(), name='detail_specialist'),
     path('addBook/', AddBookView.as_view(), name='create_book'),
     path('createauthor/', CreateAuthorView.as_view(), name='create_author'),
     path('authors/', AuthorView.as_view(), name='view_author'),
     path('authors/<int:pk>/', AuthorDetailView.as_view(), name='detail_author'),
-    path('createaudiobook/', AddAudiobookView.as_view(), name='create_audiobook')
+    path('createaudiobook/', AddAudiobookView.as_view(), name='create_audiobook'),
+    path('releases/<int:pk>/', ReleaseDetailView.as_view(), name='detail_release'),
+    path('releasessort/', RelsortView.as_view(), name='view_releasesort'),
+    path('specialists/', SpecialistView.as_view(), name='view_specialist'),
+    path('specialists/<int:pl>/', SpecialistDetailView.as_view(), name='detail_specialists'),
+    path('myview/', MyView.as_view(), name='myview')
+
+
 ]

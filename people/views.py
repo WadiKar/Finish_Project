@@ -1,11 +1,12 @@
 from django.http import HttpResponse
 from django.views import View
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
+
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User, auth, Group
+from django.contrib.auth.models import User, auth, Group, AbstractUser
 from django.contrib.auth import authenticate, login, logout
 
-# from media.forms import ReleaseAddForm
+import people
 from media.models import Category, Release
 from people.forms import UserCreateForm, LoginForm
 
@@ -53,4 +54,35 @@ class LogoutView(View):
         logout(request)
         return redirect('index')
 
+def is_member(user):
+    return user.groups.filter(name='Member').exists()
+
+
+class MyView(LoginRequiredMixin, UserPassesTestMixin, View):
+
+    login_url = '/specialists/'
+    redirect_field_name = 'create_audiobook'
+
+    def test_func(self):
+        return is_member(self.request.user)
+
+        specialist = request.user.groups.all(name='Specialist')
+        return render(request, 'listy2specialist.html', {'specialist': specialist})
+
+class SpecialistView(View):
+    def get(self, request):
+        specialist = people.models.User.objects.all()
+        return render(request, 'listy2specialist.html', {'specialist': specialist})
+
+class SpecialistDetailView(View):
+
+    def get(self, request, pk):
+        specialist = people.models.User.objects.get(pk=pk)
+        return render(request, 'detailspecialist.html', {'specialist': specialist})
+
+# class SpecialistDetailView(View):
+#
+#     def get(self, request, pk):
+#         autorzy = Author.objects.get(pk=pk)
+#         return render(request, 'detailauthor.html', {'author': autorzy})
 

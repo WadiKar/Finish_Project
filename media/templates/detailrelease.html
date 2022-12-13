@@ -1,56 +1,34 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="card w-75">
-        <div class="card-header">
-            <span> {{ release.title }}</span>
-        </div>
-        <div class="card-body">
-            <ul class="list-group">
-                <li class="list-group-item">{{ release.category_release }}</li>
-                <li class="list-group-item">{{ release.author_specialist }}</li>
-                <li class="list-group-item">{{ release.text}}</li>
-                <li class="list-group-item">{{ release.date}}</li>
-
-            </ul>
-        </div>
-    </div>
-    <p>
-
-    </p>
-
-
-{% endblock %}
-
-
-{% extends 'base.html' %}
-
-{% block content %}
 <div class="card w-75">
     <div class="card-header">
 
-        <h1> Title: {{ book.title }}</h1>
+        <h1> Title: {{ release.title }}</h1>
+        <div> The time of publishment: {{ release.date}}</div>
     </div>
     <div class="card-body">
 
-        <h2> Authors</h2>
+
+             <h2> Authors:</h2>
         <ul class="list-group">
-            {% for author in book.authors.all %}
-            <li class="list-group-item">{{ author }}</li>
+            {% for author_specialis in release.author_specialist.all %}
+            <li class="list-group-item">{{ author_specialis }}</li>
             {% endfor %}
 
         </ul>
-        <h2> Categories</h2>
+         <h2> Categories:</h2>
         <ul class="list-group">
-            {% for category in book.categories.all %}
+            {% for category in release.category_release.all %}
             <li class="list-group-item">{{ category }}</li>
             {% endfor %}
 
         </ul>
 
-        <div> The year of publishment: {{ book.year}}</div>
+
     </div>
 </div>
+
 <p>
 
 </p>
