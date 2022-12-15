@@ -13,6 +13,7 @@ class User(AbstractUser):
         return self.groups.filter(name='Specialist').exists()
 
 
+
 class Company(models.Model):
     name_company = models.CharField(max_length=256)
     industry = models.CharField(max_length=64)
@@ -29,4 +30,4 @@ class Visit(models.Model):
     patient = models.ForeignKey(User, related_name='Patient', null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"{self.location, self.what_time.strftime('%H:%M:%S')}"
+        return f"{self.location, self.what_time.strftime('%Y-%m-%d %H:%M:%S')}"

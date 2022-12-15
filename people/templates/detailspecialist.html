@@ -1,27 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="card w-75">
-    <div class="card-header">
+    <div class="card w-75">
+        <div class="card-header">
+            {% for user in %}
 
-        <h1> Author: {{ author.fullname }}</h1>
+            <span> {{ visit.specialist}}</span>
+            {% endfor%}
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                <li class="list-group-item">{{ movie.year }}</li>
+                <li class="list-group-item">{{ movie.director }}</li>
+                <li class="list-group-item">{{ movie.studio }}</li>
+            </ul>
+        </div>
     </div>
-    <div class="card-body">
-
-        <h2> Write Titles</h2>
-        <ul class="list-group">
-            {% for title in book.title.all %}
-            <li class="list-group-item">{{ title }}</li>
-            {% endfor %}
-
-        </ul>
-
-    </div>
-</div>
-<p>
-
-</p>
-
-{% endblock %}
-
-
+    <p>

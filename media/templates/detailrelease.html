@@ -12,19 +12,18 @@
 
              <h2> Authors:</h2>
         <ul class="list-group">
-            {% for author_specialis in release.author_specialist.all %}
-            <li class="list-group-item">{{ author_specialis }}</li>
-            {% endfor %}
+            <li class="list-group-item"> {{ release.author_specialist }}</li>
+
 
         </ul>
          <h2> Categories:</h2>
         <ul class="list-group">
-            {% for category in release.category_release.all %}
-            <li class="list-group-item">{{ category }}</li>
-            {% endfor %}
+
+            <li class="list-group-item">{{ release.category_release }}</li>
 
         </ul>
-
+        <img src="/{{release.relimg}}" >
+        <div> {{release.text}}</div>
 
     </div>
 </div>

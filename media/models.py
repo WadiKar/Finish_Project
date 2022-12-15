@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.exceptions import ValidationError
+
 from people.models import User
 
 
@@ -16,10 +18,15 @@ class Category(models.Model):
         return self.name
 
 
+def validate_year(value): ## Do czego ona sie tyczy. Jakiej wartosci i jak to mozliwe ze ona działa z tym ponizej
+    if value > 2023:
+        raise ValidationError("Check year")
+
+
 class Book(models.Model):
     title = models.CharField(max_length=150)
-    year = models.IntegerField()
-    authors = models.ManyToManyField(Author)
+    year = models.IntegerField(validators=[validate_year])
+    authors = models.ManyToManyField(Author, related_name="books")
     categories = models.ManyToManyField(Category)
 
     def __str__(self):
@@ -28,16 +35,6 @@ class Book(models.Model):
 
 class Audiobook(models.Model):
     time = models.IntegerField()
-    # GRADE = (
-    #     (0, ''),
-    #     (1, '*    '),
-    #     (2, '**   '),
-    #     (3, '***  '),
-    #     (4, '**** '),
-    #     (5, '*****')
-    # )
-    #
-    # opinion = models.IntegerField(choices=GRADE)
     authors = models.ManyToManyField(Author, related_name="audiobooks")  # , related_name="audiobooks", through="Book"
     categories = models.ManyToManyField('Category')
     book = models.ForeignKey(Book, blank=False, null=True, on_delete=models.CASCADE, )
@@ -51,8 +48,9 @@ class Release(models.Model):
     text = models.TextField(max_length=1200)
     category_release = models.ForeignKey(Category, on_delete=models.CASCADE)
     author_specialist = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    relimg = models.ImageField(upload_to='profile_images', default='new_post.png')
+    relimg = models.ImageField(upload_to='profile_images', default='test.png')
     date = models.DateTimeField(auto_now_add=True)
 
+
     def __str__(self):
-        return self.title
+        return f"{self.title, self.date.strftime('%Y-%m-%d %H:%M:%S')}"

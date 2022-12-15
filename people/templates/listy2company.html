@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+    <ul class="list-group">
+        {% for company in companys.all %}
+        <div class="list-group-item"><a href="/company">
+            {{release.title}}
+
+        </a></div>
+        {% endfor %}
+
+    </ul>
+
+{% endblock %}
+<!--name_company = models.CharField(max_length=256)
+  industry = models.CharField(max_length=64)
+  employees-->

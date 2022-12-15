@@ -16,7 +16,7 @@
 
                 <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3"><a href="/">Home</a> / Account Login for <b>{{user.username}}</b> </h1>
 
-
+                    {% if perms.media.view_book %}
                         <div>
                             <a class="nav-link" href="{% url 'view_audiobooks' %}">Audiobooks</a>
                         </div>
@@ -34,10 +34,14 @@
                             <a class="nav-link" href="{% url 'view_specialist' %}">Specialist</a>
                         </div>
                         <div class="nav-item">
-                            <a class="nav-link" href="{% url 'view_author' %}">Your Visits</a>
+                            <a class="nav-link" href="{% url 'make_appointment' %}">Make Appointment</a>
                         </div>
+                        <div class="nav-item">
+                            <a class="nav-link" href="{% url 'detail_appointment' 1 %}">Make Appointment</a>
+                        </div>
+                    {% endif %}
 
-
+                         {% if request.user.is_specialist %}
                         <div class="nav-item">
                             <a class="nav-link" href="{% url 'create_author' %}">Add Author</a>
                         </div>
@@ -50,6 +54,16 @@
                         <div class="nav-item">
                             <a class="nav-link" href="{% url 'create_audiobook' %}">Add Audiobook</a>
                         </div>
+                        <div class="nav-item">
+                            <a class="nav-link" href="{% url 'create_release' %}">Add Release</a>
+                        </div>
+
+                        {% endif %}
+                        {% if request.user.is_company %}
+                        <div class="nav-item">
+                            <a class="nav-link" href="{% url 'view_company' %}">Specific information</a>
+                        </div>
+                        {% endif %}
 
                             {% if user.is_authenticated %}
                         <div class="nav-item">

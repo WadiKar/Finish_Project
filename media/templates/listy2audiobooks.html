@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
     <ul class="list-group">
-        {% for authors in audiobooks.all %}
+        {% for audiobook in audiobooks.all %}
         <div class="list-group-item"><a href="/audiobooks/{{ audiobook.id }}">
-            {{audiobooks.authors.fullname}}
+            {{audiobook.book.title}}
 
         </a></div>
         {% endfor %}

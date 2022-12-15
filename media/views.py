@@ -20,21 +20,29 @@ class IndexView(View):
 
 
 class BooksView(View):
-    def get(self, request):
-        #choose_category = request.GET.get('category')
-        if request.GET.get('category') != '':
-            ksiazki = Book.objects.filter(categories__id=request.GET.get('category')).all()
+    def get(self, request, category=None):
+        choose_category = request.GET.get('category')
+        if choose_category != '':
+            ksiazki = Book.objects.filter(categories__id=choose_category).all()
         else:
+
             ksiazki = Book.objects.all()
         categories = Category.objects.all()
-        return render(request, 'listy2books.html', {'books': ksiazki, 'categories': categories})
+        bv = {
+            'books': ksiazki,
+            'categories': categories,
+            'choose_category': int(choose_category) if choose_category else None
+        }
+
+        return render(request, 'listy2books.html', bv)
 
 
 class BookDetailView(View):
 
     def get(self, request, pk):
         ksiazka = Book.objects.get(pk=pk)
-        return render(request, 'detailbook.html', {'book': ksiazka})
+        form = BookAddForm()
+        return render(request, 'detailbook.html', {'book': ksiazka, 'form':form})
 
 
 class AddBookView(UserPassesTestMixin, View):
@@ -72,6 +80,7 @@ class ReleaseDetailView(View):
         released = Release.objects.get(pk=pk)
         return render(request, 'detailrelease.html', {'release': released})
 
+
 class RelsortView(View):
     def get(self, request, category_release=None):
         choose_category = request.GET.get('date')
@@ -81,7 +90,10 @@ class RelsortView(View):
 
             relacje = Release.objects.all()
         category_release = Category.objects.all()
-        return render(request, 'listy2release.html', {'release': relacje, 'categories': category_release, 'choose_category': int(choose_category)if choose_category else None})
+        return render(request, 'listy2release.html', {'release': relacje, 'categories': category_release,
+                                                      'choose_category': int(
+                                                          choose_category) if choose_category else None})
+
 
 class AudiobooksView(View):
     def get(self, request):
@@ -96,8 +108,6 @@ class AudiobookDetailView(View):
         return render(request, 'detailaudiobook.html', {'audiobooks': audiobuks})
 
 
-
-
 class AddAudiobookView(UserPassesTestMixin, View):
     def test_func(self):
         return self.request.user.groups.filter(name='Specialist').exists()
@@ -109,9 +119,9 @@ class AddAudiobookView(UserPassesTestMixin, View):
     def post(self, request):
         form = AudiobookAddForm(request.POST)
         if form.is_valid():
-            # title = form.cleaned_data['title']
-            # time = form.cleaned_data['time']
-            # Book.objects.create(title=title, time=time)
+            book = form.cleaned_data['book']
+            time = form.cleaned_data['time']
+            Audiobook.objects.create(book=book, time=time)
             return redirect('/')
         return render(request, 'form.html', {'form': form})
 
@@ -149,3 +159,23 @@ class AuthorDetailView(View):
 #     User.objects.annotate(new_field=('first_name')).filter(new_field='Ken')
 
 
+class AddPostView(UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.groups.filter(name='Specialist').exists()
+
+    def get(self, request):
+        form = ReleaseAddForm()
+        return render(request, 'form.html', {'form': form})
+
+    def post(self, request):
+        form = ReleaseAddForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            text = form.cleaned_data['text']
+            author_specialist = form.cleaned_data['author_specialist']
+            category_release = form.cleaned_data['category_release']
+            date = form.cleaned_data['date']
+            Release.objects.create(title=title, text=text, author_specialist=author_specialist, category_release=category_release, date=date )
+
+            return redirect('view_release')
+        return render(request, 'form.html', {'form': form})
