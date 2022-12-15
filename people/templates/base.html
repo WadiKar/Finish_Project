@@ -13,8 +13,23 @@
     <div class="container-fluid">
         <ul class="navbar-nav">
             <div class="container m-auto">
-
-                <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3"><a href="/">Home</a> / Account Login for <b>{{user.username}}</b> {{user.company.name_company}} </h1>
+        <div style="display: flex;flex-direction: row;justify-content: space-between">
+               <div>   <h1 style="background-color: bisque" class="text-2xl leading-none text-gray-900 tracking-tight mt-3"><a href="/">Home</a> / Account Login for <b>{{user.username}}</b> {{user.company.name_company}} </h1>
+               </div>
+            <div>     {% if user.is_authenticated %}
+                        <div class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                        </div>
+                        {% else %}
+                        <div class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        </div>
+                        <div class="nav-item">
+                            <a class="nav-link" href="{% url 'register' %}">Register</a>
+                        </div>
+                        {% endif %}
+            </div>
+        </div>
 
                     {% if perms.media.view_book %}
                         <div>
@@ -65,18 +80,7 @@
                         </div>
                     {% endif %}
 
-                            {% if user.is_authenticated %}
-                        <div class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                        </div>
-                        {% else %}
-                        <div class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}">Login</a>
-                        </div>
-                        <div class="nav-item">
-                            <a class="nav-link" href="{% url 'register' %}">Register</a>
-                        </div>
-                        {% endif %}
+
 
 
         </ul>

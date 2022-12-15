@@ -18,6 +18,7 @@
     <ul class="list-group">
     {% for book in books %}
         <ul class="list-group-item"><a href="/books/{{ book.id }}">
+            <img src="/profile_images/{{book.relimg}}">
             {{ book.title }}
             {% for author in book.authors.all %}
                 {{author}}

@@ -28,6 +28,7 @@ class Book(models.Model):
     year = models.IntegerField(validators=[validate_year])
     authors = models.ManyToManyField(Author, related_name="books")
     categories = models.ManyToManyField(Category)
+    relimg = models.ImageField(upload_to='profile_images', default='test.png')
 
     def __str__(self):
         return self.title
