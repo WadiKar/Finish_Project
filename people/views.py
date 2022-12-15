@@ -79,33 +79,9 @@ class SpecialistView(View):
 
 class SpecialistDetailView(View):
 
-    def get(self, request, pl):
+    def get(self, request, pk):
         specialist = people.models.User.objects.get(pk=pk)
         return render(request, 'detailspecialist.html', {'specialist': specialist})
-
-
-# class Make_appointment(View):
-#     form = VisitAddForm()
-
-
-# class AddMovieView(View): #PermissionRequiredMixin,
-#     # permission_required = ['media.add_visit']
-#
-#     def get(self, request):
-#         form = VisitAddForm()
-#         return render(request, 'form.html', {'form': form})
-#
-#     def post(self, request):
-#         form = VisitAddForm()(request.POST)  #
-#         if form.is_valid():
-#             title = form.cleaned_data['title']
-#             year = form.cleaned_data['year']
-#             director = form.cleaned_data['director']
-#             Movie.objects.create(title=title, year=year,
-#                                  director=director)  # po jednej stronie jest nazwa dla django a druga dla bazy dnych?
-#             return redirect('/')
-#         return render(request, 'form.html', {
-#             'form': form})  # co własciwie, jaka funkce robia te {'form, albo movies, czy jest miedzy tym contextem róznica?)
 
 
 class Make_appointment(View):

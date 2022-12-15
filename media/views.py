@@ -1,16 +1,8 @@
-from multiprocessing.reduction import register
-
-from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
-from django.http import HttpResponse
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import render, redirect
-
-# Create your views here.
 from django.views import View
-from django.views.generic import DetailView
-
 from media.forms import ReleaseAddForm, BookAddForm, AuthorAddFrom, AudiobookAddForm
 from media.models import Book, Category, Audiobook, Release, Author
-from people.models import User
 
 
 class IndexView(View):
@@ -42,7 +34,7 @@ class BookDetailView(View):
     def get(self, request, pk):
         ksiazka = Book.objects.get(pk=pk)
         form = BookAddForm()
-        return render(request, 'detailbook.html', {'book': ksiazka, 'form':form})
+        return render(request, 'detailbook.html', {'book': ksiazka, 'form': form})
 
 
 class AddBookView(UserPassesTestMixin, View):
@@ -151,6 +143,7 @@ class AuthorDetailView(View):
         autorzy = Author.objects.get(pk=pk)
         return render(request, 'detailauthor.html', {'author': autorzy})
 
+
 # @register.filter
 # def sort_lower(lst, fullname):
 #     Author.objects.all().extra(select={'lower_name':'LOWER(NAME)'}, order_by='lower_name')
@@ -175,7 +168,8 @@ class AddPostView(UserPassesTestMixin, View):
             author_specialist = form.cleaned_data['author_specialist']
             category_release = form.cleaned_data['category_release']
             date = form.cleaned_data['date']
-            Release.objects.create(title=title, text=text, author_specialist=author_specialist, category_release=category_release, date=date )
+            Release.objects.create(title=title, text=text, author_specialist=author_specialist,
+                                   category_release=category_release, date=date)
 
             return redirect('view_release')
         return render(request, 'form.html', {'form': form})
