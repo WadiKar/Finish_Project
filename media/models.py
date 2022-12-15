@@ -46,7 +46,7 @@ class Audiobook(models.Model):
 
 class Release(models.Model):
     title = models.TextField(max_length=200)
-    text = models.TextField(max_length=1200)
+    text = models.TextField(max_length=2000)
     category_release = models.ForeignKey(Category, on_delete=models.CASCADE)
     author_specialist = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     relimg = models.ImageField(upload_to='profile_images', default='test.png')

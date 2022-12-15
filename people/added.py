@@ -314,12 +314,12 @@
 
 
 # formsy stare
-from django import forms
-from django.contrib.auth.models import User
-from wtforms import ValidationError
-import random as r
-
-from people.models import Specialist, Company, User, Person
+# from django import forms
+# from django.contrib.auth.models import User
+# from wtforms import ValidationError
+# import random as r
+#
+# from people.models import Specialist, Company, User, Person
 # from people.models import Profile
 
 # def random_number():
@@ -479,3 +479,69 @@ from people.models import Specialist, Company, User, Person
 # { % if request.user.is_specialist %}
 # { % if perms.Portal.create_book
 # ' %}-->
+
+
+
+# {% if perms.media.view_book %}
+#                         <div>
+#                             <a class="nav-link" href="{% url 'view_audiobooks' %}">Audiobooks</a>
+#                         </div>
+#                         <div class="nav-item">
+#                             <a class="nav-link" href="{% url 'view_release' %}">Posts</a>
+#                         </div>
+#                         <div class="nav-item">
+#                             <a class="nav-link" href="{% url 'view_books' %}">Books</a>
+#                         </div>
+#
+#                         <div class="nav-item">
+#                             <a class="nav-link" href="{% url 'view_author' %}">Authors</a>
+#                         </div>
+#                         <div class="nav-item">
+#                             <a class="nav-link" href="{% url 'view_specialist' %}">Specialist</a>
+#                         </div>
+#                         <div class="nav-item">
+#                             <a class="nav-link" href="{% url 'make_appointment' %}">Make Appointment</a>
+#                         </div>
+#                         <div class="nav-item">
+#                             <a class="nav-link" href="{% url 'detail_appointment' 1 %}">List Appointment</a>
+#                         </div>
+#                     {% endif %}
+
+#
+# < ul
+# id = "pagi-slide"
+# style = "padding-top: 80px; margin-top: -80px;"
+#
+#
+# class ="toggle-view list" >
+#
+# < li >
+# < div
+#
+#
+# class ="product-container" >
+#
+# < div
+#
+#
+# class ="product-image" style="position: relative;" > < / div >
+#
+# < div
+#
+#
+# class ="product-main" >
+#
+# < div
+#
+#
+# class ="product-main-top" > < / div >
+#
+# < div
+#
+#
+# class ="product-main-bottom" > < / div >
+#
+# < / div >
+# < / div >
+# < / li >
+# < / ul >
