@@ -118,7 +118,7 @@ class Make_appointment(View):
         form = VisitAddForm(request.POST)
         if form.is_valid():  # valid sprawdza czy pola ktore są w formsach są zapisae? i pobiera je na podstawie form = StudioAddForm()?
             form.save()
-        return render(request, 'form.html', {'form': form}, )
+        return render(request, 'form.html', {'form': form})
 
 
 class VisitView(View):
@@ -126,12 +126,17 @@ class VisitView(View):
         visit = Visit.objects.all()
         return render(request, 'list2visit.html', {'visits': visit})
 
+
 class Detail_appointment(View):
     def get(self, request, pk):
         visita = Visit.objects.get(pk=pk)
         return render(request, 'detailappointment.html', {'visit': visita})
 
-class CompanyVisitView(View):
+
+class VisitForCompanyView(View):
     def get(self, request):
-        company = Company.objects.all()
-        return render(request, 'listy2company.html', {'company': company})
+        employees = request.user.company.Employees.all()
+        suma = 0
+        for employee in employees.iterator():
+            suma += employee.Patient.count()
+        return render(request, 'listy2company.html', {'suma': suma})  # {'company': company}

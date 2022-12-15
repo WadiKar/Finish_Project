@@ -37,7 +37,7 @@ class Audiobook(models.Model):
     time = models.IntegerField()
     authors = models.ManyToManyField(Author, related_name="audiobooks")  # , related_name="audiobooks", through="Book"
     categories = models.ManyToManyField('Category')
-    book = models.ForeignKey(Book, blank=False, null=True, on_delete=models.CASCADE, )
+    book = models.ForeignKey(Book, blank=False, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.book.title

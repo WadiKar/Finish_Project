@@ -9,15 +9,19 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
+    company = models.ForeignKey('Company', related_name='Employees', null=True, on_delete=models.SET_NULL)
+
     def is_specialist(self):
         return self.groups.filter(name='Specialist').exists()
-
+    def is_company(self):
+        return self.groups.filter(name='Company').exists()
 
 
 class Company(models.Model):
     name_company = models.CharField(max_length=256)
     industry = models.CharField(max_length=64)
-    employees = models.ManyToManyField(User)
+
+    # employees = models.OneToManyField(User)
 
     def __str__(self):
         return self.name_company

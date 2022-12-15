@@ -17,50 +17,39 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from people.views import LogoutView, RegisterView, LoginView, SpecialistView, SpecialistDetailView, MyView, \
-    Make_appointment, Detail_appointment, CompanyVisitView, VisitView
+    Make_appointment, Detail_appointment, VisitView, VisitForCompanyView
 from media.views import BooksView, AudiobooksView, BookDetailView, AudiobookDetailView, AddBookView, \
     AuthorView, CreateAuthorView, AuthorDetailView, AuthorView, AddAudiobookView, ReleaseDetailView, \
     RelsortView, ReleasesView, AddPostView
 from django.conf import settings
 from django.conf.urls.static import static
-#releasesDetailView
-#from media import views
 from django.views.generic import TemplateView
 
-
-class ReleasesDetailView:
-    pass
-
-
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='base.html'), name='index'),
-    path('logout/', LogoutView.as_view(), name='logout'),
-    path('register/', RegisterView.as_view(), name='register'),
-    path('login/', LoginView.as_view(), name='login'),
-    path('books/', BooksView.as_view(), name='view_books'),
-    path('audiobooks/', AudiobooksView.as_view(), name='view_audiobooks'),
-    path('releases/', ReleasesView.as_view(), name='view_release'),
-    path('books/<int:pk>/', BookDetailView.as_view(), name='detail_books'),
-    path('audiobooks/<int:pk>/', AudiobookDetailView.as_view(), name='detail_audiobook'),
-   # path('specialist/', views.SpecialistView.as_view(), name='view_specialist')
-    #path('specialist/<int:pk>/', views.SpecialistDetailView.as_view(), name='detail_specialist'),
-    path('addBook/', AddBookView.as_view(), name='create_book'),
-    path('createauthor/', CreateAuthorView.as_view(), name='create_author'),
-    path('authors/', AuthorView.as_view(), name='view_author'),
-    path('authors/<int:pk>/', AuthorDetailView.as_view(), name='detail_author'),
-    path('createaudiobook/', AddAudiobookView.as_view(), name='create_audiobook'),
-    path('releases/<int:pk>/', ReleaseDetailView.as_view(), name='detail_release'),
-    path('releasessort/', RelsortView.as_view(), name='view_releasesort'),
-    path('specialists/', SpecialistView.as_view(), name='view_specialist'),
-    path('specialists/<int:pk>/', SpecialistDetailView.as_view(), name='detail_specialists'),
-    path('myview/', MyView.as_view(), name='myview'),
-    path('make_appointment/', Make_appointment.as_view(), name='make_appointment'),
-    path('detail_appointment/<int:pk>/', Detail_appointment.as_view(), name='detail_appointment'),
-    path('appointment/', VisitView.as_view(), name='view_appointment'),
-    path('create_release/', AddPostView.as_view(), name='create_release'),
-    path('company/', CompanyVisitView.as_view(), name='company'),
+                  path('admin/', admin.site.urls),
+                  path('', TemplateView.as_view(template_name='base.html'), name='index'),
+                  path('logout/', LogoutView.as_view(), name='logout'),
+                  path('register/', RegisterView.as_view(), name='register'),
+                  path('login/', LoginView.as_view(), name='login'),
+                  path('books/', BooksView.as_view(), name='view_books'),
+                  path('audiobooks/', AudiobooksView.as_view(), name='view_audiobooks'),
+                  path('releases/', ReleasesView.as_view(), name='view_release'),
+                  path('books/<int:pk>/', BookDetailView.as_view(), name='detail_books'),
+                  path('audiobooks/<int:pk>/', AudiobookDetailView.as_view(), name='detail_audiobook'),
+                  path('addBook/', AddBookView.as_view(), name='create_book'),
+                  path('createauthor/', CreateAuthorView.as_view(), name='create_author'),
+                  path('authors/', AuthorView.as_view(), name='view_author'),
+                  path('authors/<int:pk>/', AuthorDetailView.as_view(), name='detail_author'),
+                  path('createaudiobook/', AddAudiobookView.as_view(), name='create_audiobook'),
+                  path('releases/<int:pk>/', ReleaseDetailView.as_view(), name='detail_release'),
+                  path('releasessort/', RelsortView.as_view(), name='view_releasesort'),
+                  path('specialists/', SpecialistView.as_view(), name='view_specialist'),
+                  path('specialists/<int:pk>/', SpecialistDetailView.as_view(), name='detail_specialists'),
+                  path('myview/', MyView.as_view(), name='myview'),
+                  path('make_appointment/', Make_appointment.as_view(), name='make_appointment'),
+                  path('detail_appointment/<int:pk>/', Detail_appointment.as_view(), name='detail_appointment'),
+                  path('appointment/', VisitView.as_view(), name='view_appointment'),
+                  path('create_release/', AddPostView.as_view(), name='create_release'),
+                  path('company/', VisitForCompanyView.as_view(), name='view_company'),
 
-
-
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
