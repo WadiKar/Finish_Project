@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+    <ul class="list-group">
+        {% for visit in visits.all %}
+        <div class="list-group-item"><a href="{% url 'detail_appointment' visit.id %}">
+            {{visit.location}}
+
+        </a></div>
+        {% endfor %}
+
+    </ul>
+
+{% endblock %}

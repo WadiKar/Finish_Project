@@ -73,14 +73,14 @@ class MyView(LoginRequiredMixin, UserPassesTestMixin, View):
 
 class SpecialistView(View):
     def get(self, request):
-        specialist = people.models.User.objects.all()
+        specialist = people.models.User.objects.filter(groups__name='Specialist').all
         return render(request, 'listy2specialist.html', {'specialist': specialist})
 
 
 class SpecialistDetailView(View):
 
     def get(self, request, pl):
-        specialist = people.models.User.objects.get(pk=pl)
+        specialist = people.models.User.objects.get(pk=pk)
         return render(request, 'detailspecialist.html', {'specialist': specialist})
 
 
@@ -121,7 +121,10 @@ class Make_appointment(View):
         return render(request, 'form.html', {'form': form}, )
 
 
-
+class VisitView(View):
+    def get(self, request):
+        visit = Visit.objects.all()
+        return render(request, 'list2visit.html', {'visits': visit})
 
 class Detail_appointment(View):
     def get(self, request, pk):
