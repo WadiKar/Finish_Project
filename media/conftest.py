@@ -9,16 +9,18 @@ from people.models import Company, Visit, User
 
 #
 #
-# @pytest.fixture
-# def books():
-#     lst = []
-#     for n in range(10):
-#         p = Book.objects.create(title=n, year=n, authors=n, categories=n)
-#         lst.append(p)
-#     return lst
-#
-#
+@pytest.fixture
+def books():
+    lst = []
+    for n in range(10):
+        p = Book.objects.create(title=n, year=n)
+        lst.append(p)
+    return lst
 
+@pytest.fixture
+def book(books):
+    book = books[0] ##jak to było z ta listą?
+    return Book.objects.create(title='Owoc który sie nie kula', year=2022)
 
 @pytest.fixture
 def authors():

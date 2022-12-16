@@ -2,6 +2,8 @@ from django.test import TestCase
 import pytest
 from django.test import Client
 from django.urls import reverse
+
+from media.forms import BookAddForm
 from media.models import Author, Book
 
 
@@ -70,15 +72,6 @@ class TestAuthor:
 
 
 @pytest.mark.django_db
-class TestAppointment:
-    def test_appointment_author(self):
-        client = Client()
-        url = reverse('view_appointment')
-        response = client.get(url)
-        assert 200 == response.status_code
-
-
-@pytest.mark.django_db
 def test_create_author_post():
     data = {
         'fullname': 'testowy',
@@ -91,37 +84,57 @@ def test_create_author_post():
 
 
 @pytest.mark.django_db
-def test_company_author():
-    client = Client()
-    url = reverse('view_company')
-    response = client.get(url)
-    assert 200 == response.status_code
+class TestAppointment:
+    def test_appointment_author(self):
+        client = Client()
+        url = reverse('view_appointment')
+        response = client.get(url)
+        assert 200 == response.status_code
 
 
 # BooksView(View):
 @pytest.mark.django_db
-def test_list_books(book):
+def test_list_books_books(books):
     client = Client()
     url = reverse('view_books')
     response = client.get(url)
     book_context = response.context['books']
-    category_context = response.context['categories']
-    assert book_context.count() == len(book)
-    for b in book:
+    assert book_context.count() == len(books)
+    for b in books:
         assert b in book_context
-        assert b in category_context
+
+
+# BooksView(View):
+@pytest.mark.django_db
+def test_list_books_categories(categories):
+    client = Client()
+    url = reverse('view_books')
+    response = client.get(url)
+    category_context = response.context['categories']
+    assert category_context.count() == len(categories)
+    for bc in categories:
+        assert bc in category_context
+# bookdetail
+@pytest.mark.django_db
+def test_list_book_detail(book):
+    client = Client()
+    url = reverse('detail_books', args=(book.id,)) #jakim cudem bez tego przcinka nie działa a z " , " i to w takim miejscu już dziala
+    response = client.get(url)
+    assert book == response.context['book']
+    form = response.context['form']
+    assert isinstance(form, BookAddForm)
+
+# ------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
 
 
 # BooksView(View): BookDetailView(View): AddBookView(UserPassesTestMixin, View): ReleasesView(View):ReleaseDetailView(View):
 # RelsortView(View): AudiobooksView(View): AudiobookDetailView(View): AddAudiobookView(UserPassesTestMixin, View):
 # CreateAuthorView(View): AuthorView(View): AuthorDetailView(View): AddPostView(UserPassesTestMixin, View):
 # createbook
-@pytest.mark.django_db
-def test_create_author():
-    client = Client()
-    url = reverse('create_book')
-    response = client.get(url)
-    assert 200 == response.status_code
+
 
 
 # def test_func(self):
@@ -164,12 +177,3 @@ def test_list_releases_authors(authors):
     for m in authors:
         assert m in release_context
 
-
-@pytest.mark.django_db
-def test_list_person(movie):
-    client = Client()
-    url = reverse('detail_movie', args=(movie.id,))
-    response = client.get(url)
-    assert movie == response.context['movie']
-    form = response.context['form']
-    assert isinstance(form, CommentAddForm)
