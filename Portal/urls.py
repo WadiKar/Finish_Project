@@ -31,25 +31,32 @@ urlpatterns = [
                   path('logout/', LogoutView.as_view(), name='logout'),
                   path('register/', RegisterView.as_view(), name='register'),
                   path('login/', LoginView.as_view(), name='login'),
+
                   path('books/', BooksView.as_view(), name='view_books'),
-                  path('audiobooks/', AudiobooksView.as_view(), name='view_audiobooks'),
-                  path('releases/', ReleasesView.as_view(), name='view_release'),
                   path('books/<int:pk>/', BookDetailView.as_view(), name='detail_books'),
-                  path('audiobooks/<int:pk>/', AudiobookDetailView.as_view(), name='detail_audiobook'),
                   path('addBook/', AddBookView.as_view(), name='create_book'),
-                  path('createauthor/', CreateAuthorView.as_view(), name='create_author'),
-                  path('authors/', AuthorView.as_view(), name='view_author'),
-                  path('authors/<int:pk>/', AuthorDetailView.as_view(), name='detail_author'),
+
+                  path('audiobooks/', AudiobooksView.as_view(), name='view_audiobooks'),
+                  path('audiobooks/<int:pk>/', AudiobookDetailView.as_view(), name='detail_audiobook'),
                   path('createaudiobook/', AddAudiobookView.as_view(), name='create_audiobook'),
+
+                  path('releases/', ReleasesView.as_view(), name='view_release'),
                   path('releases/<int:pk>/', ReleaseDetailView.as_view(), name='detail_release'),
+                  path('create_release/', AddPostView.as_view(), name='create_release'),
                   path('releasessort/', RelsortView.as_view(), name='view_releasesort'),
+
+                  path('authors/', AuthorView.as_view(), name='view_author'),
+                  path('createauthor/', CreateAuthorView.as_view(), name='create_author'),
+                  path('authors/<int:pk>/', AuthorDetailView.as_view(), name='detail_author'),
+
                   path('specialists/', SpecialistView.as_view(), name='view_specialist'),
                   path('specialists/<int:pk>/', SpecialistDetailView.as_view(), name='detail_specialists'),
                   path('myview/', MyView.as_view(), name='myview'),
+
                   path('make_appointment/', Make_appointment.as_view(), name='make_appointment'),
                   path('detail_appointment/<int:pk>/', Detail_appointment.as_view(), name='detail_appointment'),
                   path('appointment/', VisitView.as_view(), name='view_appointment'),
-                  path('create_release/', AddPostView.as_view(), name='create_release'),
+
                   path('company/', VisitForCompanyView.as_view(), name='view_company'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

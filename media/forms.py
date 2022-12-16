@@ -50,5 +50,5 @@ class AudiobookAddForm(forms.Form):
     time = forms.CharField()
     book = forms.ModelChoiceField(queryset=Book.objects.all(), widget=forms.RadioSelect)
 
-
-'%Y-%m-%d %H:%M:%S'
+#
+# '%Y-%m-%d %H:%M:%S'

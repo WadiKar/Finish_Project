@@ -424,7 +424,7 @@
 #             return redirect('settings')
 #         return render(request, 'settings.html', {'user_profile': user_profile})
 
-#lisy2authors bylo wczesniej tak
+# lisy2authors bylo wczesniej tak
 # {% extends 'base.html' %}
 # {% block content %}
 #     <ul class="list-group">
@@ -474,12 +474,10 @@
 #         return render(request, 'listy2books.html', {'books': ksiazki, 'categories': categories, 'choose_category': int(choose_category)if choose_category else None})
 
 
-
 #             <!--            {% if request.user.is_specialist %}-->
 # { % if request.user.is_specialist %}
 # { % if perms.Portal.create_book
 # ' %}-->
-
 
 
 # {% if perms.media.view_book %}
@@ -583,3 +581,54 @@
 #
 #     def __str__(self):
 #         return f"{self.location, self.what_time.strftime('%Y-%m-%d %H:%M:%S')}"
+
+
+class ContractAddForm(forms.Form):
+    title = forms.CharField(max_length=458)
+    contractor = forms.ModelChoiceField(queryset=TheContractor.objects.all(), widget=forms.RadioSelect)
+    type = forms.ModelChoiceField(queryset=TypeProcurement.objects, widget=forms.RadioSelect)
+    value_contract = forms.IntegerField()
+    start_date = forms.DateField()
+    end_date = forms.DateField()
+
+    def clean(self):
+        cleaned_data = super().clean()  ## wykorzystuje metody z min-year czy movieadd
+        return cleaned_data
+
+
+class Contract(models.Model):
+    title = models.CharField(max_length=458)
+    contractor = models.ManyToManyField('TheContractor', related_name="contract")
+    value_contract = models.DecimalField(max_digits=10, decimal_places=2)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    type = models.ForeignKey('TypeProcurement', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return {self.title}
+
+    @property
+    def get_absolute_url(self):
+        return reverse('detail_contract', args=(self.id))
+
+
+class AddContractView(View):
+    def get(self, request):
+        form = ContractAddForm()
+
+        return render(request, 'form.html', {'form': form})
+
+    def post(self, request):
+        form = ContractAddForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            contractor = form.cleaned_data['contractor']
+            type = form.cleaned_data['type']
+            value_contract = form.cleaned_data['value_contract']
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+            con = Contract.objects.create(title=title, type=type, value_contract=value_contract,
+                                          start_date=start_date, end_date=end_date)
+            con.contractor.set(contractor)
+            return redirect('list_contract')
+        return render(request, 'form.html', {'form': form})

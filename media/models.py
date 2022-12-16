@@ -29,7 +29,7 @@ class Book(models.Model):
     authors = models.ManyToManyField(Author, related_name="books")
     categories = models.ManyToManyField(Category)
     relimg = models.ImageField(upload_to='profile_images', default='test.png')
-
+    # relimg, categories, authors, year, title
     def __str__(self):
         return self.title
 
