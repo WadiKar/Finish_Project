@@ -4,12 +4,12 @@ from django.test import Client
 from django.urls import reverse
 
 
-# def test_details(client):
-#     response = client.get('sith/list/')  # Pobieramy stronę metodą GET.
-#     assert response.status_code == 200  # Czy odpowiedź HTTP to 200 OK.
-#     # Czy widok zwrócił w kontekście DOKŁADNIE 2 Sithów?
-#     assert len(response.context['sith']) == 2
-from people.forms import CompanyForm
+from django.utils.decorators import method_decorator
+
+from media.conftest import user
+from people.forms import CompanyForm, VisitAddForm
+from people.models import User
+from people.views import MyView
 
 
 def test_index_view():
@@ -19,15 +19,7 @@ def test_index_view():
     assert response.status_code == 200
 
 
-@pytest.mark.django_db  #
-def test_list_person(persons):
-    client = Client()
-    url = reverse('list_person')
-    response = client.get(url)
-    persons_context = response.context['persons']
-    assert persons_context.count() == len(persons)  # count
-    for p in persons:  #
-        assert p in persons_context
+
 
 
 @pytest.mark.django_db
@@ -40,3 +32,62 @@ class TestCompany:
         }
         response = client.post(url, what_time)
         assert 200 == response.status_code
+
+@pytest.mark.django_db
+def test_visit_user_detail(visit):
+    client = Client()
+    url = reverse('detail_appointment', args=(visit.id,))
+    response = client.get(url)
+    assert visit == response.context['visit']
+    form = response.context['form']
+    assert isinstance(form, VisitAddForm)
+# -------------------------------
+def test_index_view():
+    client = Client()  # otwieramy przegladarke
+    url = reverse('index')  # mowimy na jaki url chcemy wejsc
+    response = client.get(url)  # wchodzimy na url
+    assert response.status_code == 200
+
+@pytest.mark.django_db
+class TestVisit:
+    def test_visit_view(self):
+        client = Client()  # otwieramy przegladarke
+        url = reverse('make_appointment')  # mowimy na jaki url chcemy wejsc
+        response = client.get(url)  # wchodzimy na url
+        assert response.status_code == 200
+
+@pytest.mark.django_db
+class TestSpecialist:
+    def test_specialist_view(self):
+        client = Client()  # otwieramy przegladarke
+        url = reverse('view_specialist')  # mowimy na jaki url chcemy wejsc
+        response = client.get(url)  # wchodzimy na url
+        assert response.status_code == 200
+
+# from django.views.generic.edit import UpdateView
+# from django.contrib.auth.decorators import login_required
+# from django.contrib.auth.mixins import UserPassesTestMixin
+# from django.contrib.auth import authenticate, login
+#
+# @pytest.mark.django_db
+# class TestUserOwnerMyView(UserPassesTestMixin):
+#     def test_func(self):
+#         self.object = self.get_object()
+#         return self.request.user == self.object.user.is_specialist()
+#
+#
+# class MyView(UpdateView, TestUserOwnerMyView()):
+#     model = User
+#
+#     @method_decorator (login)
+#     def dispatch(self, *args, **kwargs):
+#         return super(MyView, self).dispatch(*args, **kwargs)
+
+
+
+# class EditPost(UpdateView, TestUserOwnerOfPost):
+#     model = User
+#
+#     @method_decorator(login_required)
+#     def dispatch(self, *args, **kwargs):
+#         return super(EditPost, self).dispatch(*args, **kwargs)

@@ -97,7 +97,9 @@ class AudiobookDetailView(View):
 
     def get(self, request, pk):
         audiobuks = Audiobook.objects.get(pk=pk)
-        return render(request, 'detailaudiobook.html', {'audiobooks': audiobuks})
+        form = AudiobookAddForm()
+        return render(request, 'detailaudiobook.html', {'audiobooks': audiobuks, 'form': form})
+        # return render(request, 'detailaudiobook.html', {'audiobooks': audiobuks})
 
 
 class AddAudiobookView(UserPassesTestMixin, View):
@@ -142,14 +144,6 @@ class AuthorDetailView(View):
     def get(self, request, pk):
         autorzy = Author.objects.get(pk=pk)
         return render(request, 'detailauthor.html', {'author': autorzy})
-
-
-# @register.filter
-# def sort_lower(lst, fullname):
-#     Author.objects.all().extra(select={'lower_name':'LOWER(NAME)'}, order_by='lower_name')
-#     return sorted(lst,fullname=lambda item: getattr(item, fullname).lower())
-# def filter(self, request):
-#     User.objects.annotate(new_field=('first_name')).filter(new_field='Ken')
 
 
 class AddPostView(UserPassesTestMixin, View):
