@@ -18,9 +18,8 @@ from django.contrib import admin
 from django.urls import path
 from people.views import LogoutView, RegisterView, LoginView, SpecialistView, SpecialistDetailView, MyView, \
     Make_appointment, Detail_appointment, VisitView, VisitForCompanyView
-from media.views import BooksView, AudiobooksView, BookDetailView, AudiobookDetailView, AddBookView, \
-    AuthorView, CreateAuthorView, AuthorDetailView, AuthorView, AddAudiobookView, ReleaseDetailView, \
-    RelsortView, ReleasesView, AddPostView
+from media.views import BooksView, AudiobooksView, BookDetailView, AudiobookDetailView, AddBookView, CreateAuthorView, AuthorDetailView, AuthorView, AddAudiobookView, ReleaseDetailView, \
+     ReleasesView, AddPostView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
@@ -43,7 +42,6 @@ urlpatterns = [
                   path('releases/', ReleasesView.as_view(), name='view_release'),
                   path('releases/<int:pk>/', ReleaseDetailView.as_view(), name='detail_release'),
                   path('create_release/', AddPostView.as_view(), name='create_release'),
-                  path('releasessort/', RelsortView.as_view(), name='view_releasesort'),
 
                   path('authors/', AuthorView.as_view(), name='view_author'),
                   path('createauthor/', CreateAuthorView.as_view(), name='create_author'),

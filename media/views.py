@@ -6,12 +6,17 @@ from media.models import Book, Category, Audiobook, Release, Author
 
 
 class IndexView(View):
+    """ Strona główna dla niezalogowanych i zalogowanych z całym menu do wyboru"""
 
     def get(self, request):
         return render(request, '')
 
 
 class BooksView(View):
+    """
+    Widok ksiażek, całej listy. z filtrowaniem. Jesli jest wskazana katagoria, to wyświetlają ksiazki, ktore sa przepisane do id które jest oznaczone poprzez !=''
+    A na koniec warunek że jesli caktegoria nie jest wybrana to nie jest nic wyswietlany i jest to widok na  start
+    """
     def get(self, request, category=None):
         choose_category = request.GET.get('category')
         if choose_category != '':
@@ -25,12 +30,13 @@ class BooksView(View):
             'categories': categories,
             'choose_category': int(choose_category) if choose_category else None
         }
-
         return render(request, 'listy2books.html', bv)
 
 
 class BookDetailView(View):
-
+    """
+        Wyswietlane są szczegóły ksiązki. uzywa formularza. Szczegóły wyświetlają się po podaniu id książki.
+        """
     def get(self, request, pk):
         ksiazka = Book.objects.get(pk=pk)
         form = BookAddForm()
@@ -38,6 +44,10 @@ class BookDetailView(View):
 
 
 class AddBookView(UserPassesTestMixin, View):
+    """
+    Widok dodawania książki z uprawnieniem że użytkownik jest specjalistą.
+    W metodzie POST funkcja sprawdza czy podne wartości są zgodne z wartościami zadeklarowanymi w models.py
+    """
     def test_func(self):
         return self.request.user.groups.filter(name='Specialist').exists()
 
@@ -61,48 +71,45 @@ class AddBookView(UserPassesTestMixin, View):
 
 
 class ReleasesView(View):
+    """ Widok listy wszystkich postów które dodał specjalista"""
     def get(self, request):
         nowe_posty = Release.objects.all()
         return render(request, 'listy2release.html', {'release': nowe_posty})
 
 
 class ReleaseDetailView(View):
+    """Szczegóły relacji lub postów które dodał specjalista"""
 
     def get(self, request, pk):
         released = Release.objects.get(pk=pk)
         return render(request, 'detailrelease.html', {'release': released})
 
 
-class RelsortView(View):
-    def get(self, request, category_release=None):
-        choose_category = request.GET.get('date')
-        if choose_category != '':
-            relacje = Release.objects.filter(category_release__id=choose_category).all()
-        else:
-
-            relacje = Release.objects.all()
-        category_release = Category.objects.all()
-        return render(request, 'listy2release.html', {'release': relacje, 'categories': category_release,
-                                                      'choose_category': int(
-                                                          choose_category) if choose_category else None})
 
 
 class AudiobooksView(View):
+    """Lista audibooków dodanych przez admina lub specjalistę. Do wglądu dla pracownika lub pacjenta. """
     def get(self, request):
         audiobuki = Audiobook.objects.all()
         return render(request, 'listy2audiobooks.html', {'audiobooks': audiobuki})
 
 
 class AudiobookDetailView(View):
+    """Szczegóły audiobooka, czas trwania, tytuł książki i kategorii"""
 
     def get(self, request, pk):
         audiobuks = Audiobook.objects.get(pk=pk)
         form = AudiobookAddForm()
         return render(request, 'detailaudiobook.html', {'audiobooks': audiobuks, 'form': form})
-        # return render(request, 'detailaudiobook.html', {'audiobooks': audiobuks})
+
 
 
 class AddAudiobookView(UserPassesTestMixin, View):
+    """
+      Widok dodawania audiobooka z uprawnieniem że użytkownik jest specjalistą.
+      W metodzie POST funkcja sprawdza czy podne wartości są zgodne z wartościami zadeklarowanymi w models.py
+      """
+
     def test_func(self):
         return self.request.user.groups.filter(name='Specialist').exists()
 
@@ -121,6 +128,10 @@ class AddAudiobookView(UserPassesTestMixin, View):
 
 
 class CreateAuthorView(View):
+    """
+      Widok dodawania autora z uprawnieniem że użytkownik jest specjalistą.
+      W metodzie POST funkcja tworzy nowy obiekt
+      """
     def test_func(self):
         return self.request.user.groups.filter(name='Specialist').exists()
 
@@ -134,19 +145,25 @@ class CreateAuthorView(View):
 
 
 class AuthorView(View):
+    "Lista autorów dodanych przez admina lub specjalistę. Do wglądu dla pracownika lub pacjenta. """
     def get(self, request):
         autorzy = Author.objects.all()
         return render(request, 'listy2authors.html', {'authors': autorzy})
 
 
 class AuthorDetailView(View):
-
+    """Szczegóły autora. Napisane książki. URL działa z podaniem id książki"""
     def get(self, request, pk):
         autorzy = Author.objects.get(pk=pk)
         return render(request, 'detailauthor.html', {'author': autorzy})
 
 
 class AddPostView(UserPassesTestMixin, View):
+    """
+         Widok dodawania relacji z uprawnieniem że użytkownik jest specjalistą.
+         W metodzie POST funkcja sprawdza czy podne wartości są zgodne z wartościami zadeklarowanymi w models.py
+        i tworzy nowy obiekt
+         """
     def test_func(self):
         return self.request.user.groups.filter(name='Specialist').exists()
 
