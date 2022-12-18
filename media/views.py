@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views import View
 from media.forms import ReleaseAddForm, BookAddForm, AuthorAddFrom, AudiobookAddForm
@@ -17,7 +17,7 @@ class BooksView(View):
     Widok ksiażek, całej listy. z filtrowaniem. Jesli jest wskazana katagoria, to wyświetlają ksiazki, ktore sa przepisane do id które jest oznaczone poprzez !=''
     A na koniec warunek że jesli caktegoria nie jest wybrana to nie jest nic wyswietlany i jest to widok na  start
     """
-    def get(self, request, category=None):
+    def get(self, request):
         choose_category = request.GET.get('category')
         if choose_category != '':
             ksiazki = Book.objects.filter(categories__id=choose_category).all()
@@ -44,7 +44,7 @@ class BookDetailView(View):
         return render(request, 'detailbook.html', {'book': ksiazka, 'form': form})
 
 
-class AddBookView(UserPassesTestMixin, View):
+class AddBookView(LoginRequiredMixin, UserPassesTestMixin, View):
     """
     Widok dodawania książki z uprawnieniem że użytkownik jest specjalistą.
     W metodzie POST funkcja sprawdza czy podne wartości są zgodne z wartościami zadeklarowanymi w models.py
@@ -128,7 +128,7 @@ class AddAudiobookView(UserPassesTestMixin, View):
         return render(request, 'form.html', {'form': form})
 
 
-class CreateAuthorView(View):
+class CreateAuthorView(UserPassesTestMixin, View):
     """
       Widok dodawania autora z uprawnieniem że użytkownik jest specjalistą.
       W metodzie POST funkcja tworzy nowy obiekt

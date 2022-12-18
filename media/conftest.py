@@ -4,7 +4,7 @@ from django.test import Client
 from django.urls import reverse
 
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import User, Permission, Group
 
 from media.models import Author, Book, Audiobook, Category, Release
 from people.models import Company, Visit, User
@@ -154,8 +154,14 @@ def releas_authors(authors):
 def user():
     u = User.objects.create(username='tadeusz')
     return u
+@pytest.fixture
+def user_user_for_specialist():
+    group = Group.objects.create(name='Specialist')
+    userowy = User.objects.create(username='specialisttest', password='test')
+    userowy.groups.add(group)
+    userowy.save()
 
-
+    return userowy
 # ---------------------------------------------------------------------------------------------------- USER
 @pytest.fixture
 def user_with_permission():

@@ -1,5 +1,5 @@
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import User, Permission, Group
 from people.models import Company, Visit
 import pytest
 from django.test import Client
@@ -136,3 +136,4 @@ def user_user_for_company(companies):
 def user_company(user):
     group = User.objects.filter(groups__name='Company').all
     return group
+

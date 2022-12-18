@@ -6,8 +6,8 @@ from django.urls import reverse
 from media.forms import BookAddForm, AudiobookAddForm
 from media.models import Author, Book
 
-
 # Create your tests here.
+from people.conftest import User
 
 
 def test_index_view():
@@ -56,26 +56,23 @@ def test_audiobooks_view():
     response = client.get(url)  # wchodzimy na url
     assert response.status_code == 200
 
-
-                # @pytest.mark.django_db
-                # def test_audiobook_detail(audiobook):
-                #     client = Client()
-                #     url = reverse('detail_audiobook',  args=(audiobook.id,))  # jakim cudem bez tego przcinka nie działa a z " , " i to w takim miejscu już dziala
-                #     response = client.get(url)
-                #     assert audiobook == response.context['audiobooks']
-                #     form = response.context['form']
-                #     assert isinstance(form, AudiobookAddForm)
-                #
-                # @pytest.mark.django_db
-                # def test_audiobook_detail(audiobo):
-                #     client = Client()
-                #     url = reverse('detail_audiobook',  args=(audiobo.id,))  # jakim cudem bez tego przcinka nie działa a z " , " i to w takim miejscu już dziala
-                #     response = client.get(url)
-                #     assert audiobo == response.context['audiobooks']
-                #     form = response.context['form']
-                #     assert isinstance(form, AudiobookAddForm)
-
-
+    # @pytest.mark.django_db
+    # def test_audiobook_detail(audiobook):
+    #     client = Client()
+    #     url = reverse('detail_audiobook',  args=(audiobook.id,))  # jakim cudem bez tego przcinka nie działa a z " , " i to w takim miejscu już dziala
+    #     response = client.get(url)
+    #     assert audiobook == response.context['audiobooks']
+    #     form = response.context['form']
+    #     assert isinstance(form, AudiobookAddForm)
+    #
+    # @pytest.mark.django_db
+    # def test_audiobook_detail(audiobo):
+    #     client = Client()
+    #     url = reverse('detail_audiobook',  args=(audiobo.id,))  # jakim cudem bez tego przcinka nie działa a z " , " i to w takim miejscu już dziala
+    #     response = client.get(url)
+    #     assert audiobo == response.context['audiobooks']
+    #     form = response.context['form']
+    #     assert isinstance(form, AudiobookAddForm)
 
 
 @pytest.mark.django_db
@@ -99,7 +96,6 @@ def test_list_releases_categories(release_categories):
 
 
 @pytest.mark.django_db
-
 def test_specialist_view():
     client = Client()  # otwieramy przegladarke
     url = reverse('view_specialist')  # mowimy na jaki url chcemy wejsc
@@ -126,15 +122,20 @@ def test_create_author():
 
 
 @pytest.mark.django_db
-def test_create_author_post():
-    data = {
-        'fullname': 'testowy',
-    }
-    client = Client()#------------------------------------superuser usergrups?
-    url = reverse('create_author')
-    response = client.post(url, data)
-    assert response.status_code == 302
-    assert Author.objects.get(fullname='testowy')
+class VisitForCompany(TestCase):
+    @pytest.mark.usefixtures("user_user_for_specialist")
+    def test_create_author_post(self):
+        data = {
+            'fullname': 'tey autor'}
+        client = Client()  # ------------------------------------superuser usergrups?
+        client.force_login(User.objects.get_or_create(username='specialisttest')[0])
+        url = reverse('create_author')
+        response = client.post(url, data)
+        assert response.status_code == 302
+        self.assertRedirects(response, reverse("view_author"))
+        response2 = client.get(reverse("view_author"))  # spr czy sie dodał
+        self.assertContains(response2, 'tey autor')  # sprawdza czy jest zawartość na stronie
+        assert response2.status_code == 200
 
 
 # class AuthorView(View):
@@ -163,32 +164,33 @@ def test_appointment():
 def test_list_books_books(books):
     client = Client()
     url = reverse('view_books')
-    response = client.get(url, {'category':1})
+    response = client.get(url, {'category': 1})
     book_context = response.context['books']
     assert book_context.count() == len(books)
     for b in books:
         assert b in book_context
 
+
 @pytest.mark.django_db
 def test_list_books_books(books_category):
     client = Client()
     url = reverse('view_books')
-    response = client.get(url, {'category':""})
+    response = client.get(url, {'category': ""})
     book_context = response.context['books']
     assert book_context.count() == len(books_category)
     for b in books_category:
         assert b in book_context
 
+
 @pytest.mark.django_db
 def test_list_books_filter(books_category):
     client = Client()
     url = reverse('view_books')
-    response = client.get(url, {'category':1})
+    response = client.get(url, {'category': 1})
     book_context = response.context['books']
     assert book_context.count() == 10
     for b in book_context:
         assert b in books_category
-
 
 # !
 
