@@ -23,9 +23,27 @@ def books():
     lst = []
     category = Category.objects.create(name='testowany')
     author = Author.objects.create(fullname='testowy')
-    for n in range(1):
-        p = Book.objects.create(title=n, year=n)
+    for n in range(10):
+        p = Book.objects.create(title=n, year=2020)
         p.categories.add(category)
+        p.authors.add(author)
+        lst.append(p)
+    return lst
+
+@pytest.fixture
+def books_category():
+    lst = []
+    category = Category.objects.create(name='testowany')
+    catego_2 = Category.objects.create(name='testowany2')
+    author = Author.objects.create(fullname='testowy')
+    for n in range(10):
+        p = Book.objects.create(title=n, year=2020)
+        p.categories.add(category)
+        p.authors.add(author)
+        lst.append(p)
+    for n in range(10):
+        p = Book.objects.create(title=n, year=2020)
+        p.categories.add(catego_2)
         p.authors.add(author)
         lst.append(p)
     return lst

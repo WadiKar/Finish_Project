@@ -18,12 +18,12 @@ def test_index_view():
 
 
 @pytest.mark.django_db
-class TestBooks:
-    def test_books_view(self):
-        client = Client()  # otwieramy przegladarke
-        url = reverse('view_books')  # mowimy na jaki url chcemy wejsc
-        response = client.get(url)  # wchodzimy na url
-        assert response.status_code == 200
+# class TestBooks:
+def test_books_view():
+    client = Client()  # otwieramy przegladarke
+    url = reverse('view_books')  # mowimy na jaki url chcemy wejsc
+    response = client.get(url)  # wchodzimy na url
+    assert response.status_code == 200
 
 
 @pytest.mark.django_db
@@ -49,12 +49,12 @@ def test_list_books_categories(categories):
 
 
 @pytest.mark.django_db
-class TestAudiobooks:
-    def test_audiobooks_view(self):
-        client = Client()  # otwieramy przegladarke
-        url = reverse('view_audiobooks')  # mowimy na jaki url chcemy wejsc
-        response = client.get(url)  # wchodzimy na url
-        assert response.status_code == 200
+# class TestAudiobooks:
+def test_audiobooks_view():
+    client = Client()  # otwieramy przegladarke
+    url = reverse('view_audiobooks')  # mowimy na jaki url chcemy wejsc
+    response = client.get(url)  # wchodzimy na url
+    assert response.status_code == 200
 
 
                 # @pytest.mark.django_db
@@ -79,12 +79,12 @@ class TestAudiobooks:
 
 
 @pytest.mark.django_db
-class TestReleases:
-    def test_releases_view(self):
-        client = Client()  # otwieramy przegladarke
-        url = reverse('view_release')  # mowimy na jaki url chcemy wejsc
-        response = client.get(url)  # wchodzimy na url
-        assert response.status_code == 200
+# class TestReleases:
+def test_releases_view():
+    client = Client()  # otwieramy przegladarke
+    url = reverse('view_release')  # mowimy na jaki url chcemy wejsc
+    response = client.get(url)  # wchodzimy na url
+    assert response.status_code == 200
 
 
 @pytest.mark.django_db
@@ -99,30 +99,30 @@ def test_list_releases_categories(release_categories):
 
 
 @pytest.mark.django_db
-class TestSpecialist:
-    def test_specialist_view(self):
-        client = Client()  # otwieramy przegladarke
-        url = reverse('view_specialist')  # mowimy na jaki url chcemy wejsc
-        response = client.get(url)  # wchodzimy na url
-        assert response.status_code == 200
+
+def test_specialist_view():
+    client = Client()  # otwieramy przegladarke
+    url = reverse('view_specialist')  # mowimy na jaki url chcemy wejsc
+    response = client.get(url)  # wchodzimy na url
+    assert response.status_code == 200
 
 
 @pytest.mark.django_db
-class TestAuthor:
-    def test_author_view(self):
-        client = Client()  # otwieramy przegladarke
-        url = reverse('view_author')  # mowimy na jaki url chcemy wejsc
-        response = client.get(url)  # wchodzimy na url
-        assert response.status_code == 200
+# class TestAuthor:
+def test_author_view():
+    client = Client()  # otwieramy przegladarke
+    url = reverse('view_author')  # mowimy na jaki url chcemy wejsc
+    response = client.get(url)  # wchodzimy na url
+    assert response.status_code == 200
 
 
 @pytest.mark.django_db
-class TestAuthor:
-    def test_create_author(self):
-        client = Client()
-        url = reverse('create_author')
-        response = client.get(url)
-        assert 200 == response.status_code
+# class TestAuthor:
+def test_create_author():
+    client = Client()
+    url = reverse('create_author')
+    response = client.get(url)
+    assert 200 == response.status_code
 
 
 @pytest.mark.django_db
@@ -130,7 +130,7 @@ def test_create_author_post():
     data = {
         'fullname': 'testowy',
     }
-    client = Client()
+    client = Client()#------------------------------------superuser usergrups?
     url = reverse('create_author')
     response = client.post(url, data)
     assert response.status_code == 302
@@ -148,40 +148,53 @@ class TestAppointment:
         assert 200 == response.status_code
 
 
+@pytest.mark.django_db
+# class TestAppointment:
+def test_appointment():
+    client = Client()
+    url = reverse('view_appointment')
+    response = client.get(url)
+    assert 200 == response.status_code
+
+
 # ---------------------------------------------------------------------------------------------NIE DZIAŁAJĄ
 # BooksView(View):
 @pytest.mark.django_db
 def test_list_books_books(books):
     client = Client()
     url = reverse('view_books')
-    response = client.get(url)
+    response = client.get(url, {'category':1})
     book_context = response.context['books']
     assert book_context.count() == len(books)
     for b in books:
         assert b in book_context
 
-
-# !
 @pytest.mark.django_db
-def test_list_books(books):
+def test_list_books_books(books_category):
     client = Client()
     url = reverse('view_books')
-    response = client.get(url)
+    response = client.get(url, {'category':""})
     book_context = response.context['books']
-    assert book_context.count() == len(books)
-    for boo in books:
-        assert boo in book_context
-
+    assert book_context.count() == len(books_category)
+    for b in books_category:
+        assert b in book_context
 
 @pytest.mark.django_db
-def test_list_movies(movies):
+def test_list_books_filter(books_category):
     client = Client()
-    url = reverse('list_movie')
-    response = client.get(url)
-    movie_context = response.context['movies']
-    assert movie_context.count() == len(movies)
-    for m in movies:
-        assert m in movie_context
+    url = reverse('view_books')
+    response = client.get(url, {'category':1})
+    book_context = response.context['books']
+    assert book_context.count() == 10
+    for b in book_context:
+        assert b in books_category
+
+
+# !
+
+
+# self.user = User.objects.create_user(username='testuser', password='12345')
+# login = self.client.login(username='testuser', password='12345')
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 

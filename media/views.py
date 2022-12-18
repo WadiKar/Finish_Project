@@ -24,6 +24,7 @@ class BooksView(View):
         else:
 
             ksiazki = Book.objects.all()
+        #ksiazki = Book.objects.all()
         categories = Category.objects.all()
         bv = {
             'books': ksiazki,

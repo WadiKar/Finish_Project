@@ -28,14 +28,14 @@ def users_po_company():
         lst.appendu(u)
     return lst
 
-
-@pytest.fixture  # tu przygotowujemy materiały do testów
-def companies():
-    lst = []
-    for n in range(10):
-        c = Company.objects.create(name_company=n, industry=n)
-        lst.append(c)
-    return lst
+#
+# @pytest.fixture  # tu przygotowujemy materiały do testów
+# def companies():
+#     lst = []
+#     for n in range(10):
+#         c = Company.objects.create(name_company=n, industry=n)
+#         lst.append(c)
+#     return lst
 
 
 @pytest.fixture
@@ -54,7 +54,7 @@ def user_is_specialist():
 def companies():
     lst = []
     for n in range(10):
-        c = Company.objects.create(name_company=n, industry=n)
+        c = Company.objects.create(name_company='company'+(str(n)), industry=n)
         lst.append(c)
     return lst
 
@@ -96,6 +96,7 @@ def users(companies):
         lst.append(user_companowy)
     return lst
 
+
 #
 # @pytest.fixture
 # def users(companies):
@@ -120,3 +121,18 @@ def visites(users):
                                  patient=user)
         lst.append(m)
     return lst
+
+
+@pytest.fixture
+def user_user_for_company(companies):
+    company = companies[0]
+    userowy = User.objects.create(username='test', password='test')
+    userowy.company = company
+    userowy.save()
+    return userowy
+
+
+@pytest.fixture
+def user_company(user):
+    group = User.objects.filter(groups__name='Company').all
+    return group
